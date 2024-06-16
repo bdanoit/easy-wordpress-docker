@@ -1,0 +1,49 @@
+services:
+  webserver:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - ./html/:/var/www/html
+      - ./logs/:/var/log/nginx
+    environment:
+      - HOST=${HOSTNAME}
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+  wordpress:
+    image: wordpress:php8.1-fpm
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASS}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_REDIS_HOST', 'redis');
+        define('WP_DISALLOW_FILE_EDIT', false);
+        define('WP_HOME_URL', 'https://{HOSTNAME}');
+        define('WP_SITE_URL:', 'https://${HOSTNAME}');
+        define( 'FORCE_SSL_ADMIN', true );
+    volumes:
+      - ./html/:/var/www/html/
+      - ./config/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - ./mysql:/var/lib/mysql
+  redis:
+    image: redis:alpine
