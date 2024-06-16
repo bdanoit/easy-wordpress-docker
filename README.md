@@ -1,10 +1,9 @@
-# WordPress container
-
-## Maintained by Baleze Danoit
+# Easy WordPress Docker Container
+Setup a single-tenant docker container complete with Wordpress FPM, Nginx, MySQL, Certbot, and Redis
 
 ---
 
-### Setup
+## Setup
 Create your .env (see example.env)
 ```
 DB_NAME=mydb
