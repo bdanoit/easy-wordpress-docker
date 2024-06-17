@@ -14,7 +14,7 @@ HOSTNAME=example.com
 To initialize the server certificate run the following (remove --dry-run once you have tested your setup):
 ```
 docker compose kill webserver
-docker compose run -d -e NGINX_CONFIG_FILE=nginx.challenge.conf webserver
+docker compose run -d -P -e NGINX_CONFIG_FILE=nginx.challenge.conf webserver
 docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run
 ```
 Don't forget to add a crontab for renew-ssl.sh
