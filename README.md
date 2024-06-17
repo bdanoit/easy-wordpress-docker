@@ -12,8 +12,7 @@ DB_PASS=mypass
 HOSTNAME=example.com
 ```
 ## Setting up certificates
-To initialize your ssl certificate run the following commands (this will change the NGINX_CONFIG_FILE env variable to allow the challenge to complete).
-Note: remove --dry-run once you have tested your setup
+To initialize your ssl certificate run the following commands. The NGINX_CONFIG_FILE env variable is updated in order to process the challenge. Note: --dry-run is included for testing purposes, remove it once you have tested your setup
 ```
 export NGINX_CONFIG_FILE=nginx.challenge.conf && \
 docker compose up -d webserver
