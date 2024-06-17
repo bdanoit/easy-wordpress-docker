@@ -11,13 +11,22 @@ DB_USER=myuser
 DB_PASS=mypass
 HOSTNAME=example.com
 ```
-To initialize the server certificate run the following (remove --dry-run once you have tested your setup):
+## Setting up certificates
+To initialize your ssl certificate run the following commands (this will change the NGINX_CONFIG_FILE env variable to allow the challenge to complete).
+Note: remove --dry-run once you have tested your setup
 ```
-docker compose kill webserver
-docker compose run -d -P -e NGINX_CONFIG_FILE=nginx.challenge.conf webserver
+export NGINX_CONFIG_FILE=nginx.challenge.conf && \
+docker compose up -d webserver
 docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run
 ```
-Don't forget to add a crontab for renew-ssl.sh
+Once you have the certificate, reset your NGINX_CONFIG_FILE to the default
+```
+export NGINX_CONFIG_FILE=nginx.conf && \
+docker compose up -d webserver
+```
+## Certificate renewal
+You can use the included renew-ssl.sh with crontab (change the paths as needed)
 ```
 0 5 * * * /var/www/renew-ssl.sh
 ```
+
