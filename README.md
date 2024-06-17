@@ -12,12 +12,15 @@ DB_PASS=mypass
 HOSTNAME=example.com
 ```
 ## Setting up certificates
-To initialize your ssl certificate run the following commands. The NGINX_CONFIG_FILE env variable is updated in order to process the challenge. Note: --dry-run is included for testing purposes, remove it once you have tested your setup
+To initialize your ssl certificate run the following
 ```
 export NGINX_CONFIG_FILE=nginx.challenge.conf && \
 docker compose up -d webserver
 docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run
 ```
+*Note: --dry-run is included for testing purposes, remove it once you have tested your setup*
+
+ 
 Once you have the certificate, reset your NGINX_CONFIG_FILE to the default
 ```
 export NGINX_CONFIG_FILE=nginx.conf && \
