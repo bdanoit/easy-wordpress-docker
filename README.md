@@ -24,7 +24,16 @@ export NGINX_CONFIG_FILE=nginx.conf && \
 docker compose up -d webserver
 ```
 ## Certificate renewal
-You can use the included renew-ssl.sh with crontab (change the paths as needed)
+Renew the certificate
+```
+docker compose run --rm certbot renew
+```
+Test and reload nginx
+```
+docker compose exec webserver nginx -t && \
+docker compose exec webserver nginx -s reload
+```
+You can use the included renew-ssl.sh in crontab, make sure to change the paths as needed
 ```
 0 5 * * * /var/www/renew-ssl.sh
 ```
